@@ -1,0 +1,105 @@
+---
+title: "IterationCh21"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+```{r}
+library(tidyverse)
+library(stringr)
+```
+#Ch 21 Iteration
+## 21.2.1
+1. 
+```{r}
+output <- vector("double", ncol(mtcars))
+names(output) <- names(mtcars)
+for (i in names(mtcars)) {
+  output[i] <- mean(mtcars[[i]])
+}
+output
+```
+```{r}
+output <- vector("list", ncol(nycflights13::flights))
+names(output) <- names(nycflights13::flights)
+for (i in names(nycflights13::flights)) {
+  output[i] <- class(nycflights13::flights[[i]])
+}
+output
+```
+```{r}
+data("iris")
+iris_uniq <- vector("double", ncol(iris))
+names(iris_uniq)<- names(iris)
+for (i in names(iris)){
+  iris_uniq[1] <- length(unique(iris[[i]]))
+}
+iris_uniq
+```
+```{r}
+n <- 10
+mu <- c(-10, 0, 10, 100)
+normals <- vector("list", length(mu))
+for (i in seq_along(normals)) {
+  normals[[i]] <- rnorm(n, mean = mu[i])
+}
+normals
+```
+3.
+```{r}
+humps <- c("five", "four", "three", "two", "one", "no")
+for (i in humps) {
+  cat(str_c("Alice the camel has ", rep(i,3), " humps.", collapse = "\n"), "\n")
+  if (i == "no") { cat("Now Alice is a horse.\n")} else{
+    cat("So go, Alice, go.\n")
+  }
+  cat("\n")
+}
+```
+```{r}
+bottles<- function(n) {
+  if (n>1) {
+    str_c(n, "bottles")
+  } else if (n == 1) {
+    "1 bottle"
+  } else {
+    "no more bottles"
+  }
+}
+beer_bottles <- function(total_bottles) {
+  for (current_bottles in seq(total_bottles, 0)) {
+    if (current_bottles > 0) {
+      cat(str_c( "Take one down and pass it around, ", bottles(current_bottles - 1), " of beer on the wall.\n"))
+    } else {cat(str_c("Go to the store and buy some more, ", bottles(total_bottles), " of cat(\n"))}
+  }
+}
+beer_bottles(3)
+```
+##21.3.1
+2. if there is no name for the vector, the it cannot run the loop. If there are duplicate names, then it will use the first
+4. this code multiplies disp by 0.0163871 and replaces am with a factor variable
+##21.4.1
+1. returns a vector or array or list of values obtained by applying a function to margins of an array or matrix.
+2. 
+```{r}
+col_summary2 <- function(df, fun) {
+  numeric_cols <- vector("logical", length(df))
+  for (i in seq_along(df)) {
+    numeric_cols[[i]] <- is.numeric(df[[i]])
+  }
+  idxs <- which(numeric_cols)
+  n <- sum(numeric_cols)
+  out <- vector("double", n)
+  for (i in seq_along(idxs)){
+    out[[i]] <- fun(df[[idxs[[i]]]]) 
+  }
+  names(out) <- names(df)[idxs]
+  out
+}
+```
+##21.5.1
+2. map function
+3.map will work on any function. it runs through all the numbers 1 through 5 and the runif makes it use that number as the first argument
+
